@@ -28,13 +28,13 @@ public class ChatUtils {
     private AcceptThread acceptThread;
     private ConnectedThread connectedThread;
 
-    private final UUID APP_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
-    private final String APP_NAME = "BluetoothChatApp";
-
     public static final int STATE_NONE = 0;
     public static final int STATE_LISTEN = 1;
     public static final int STATE_CONNECTING = 2;
     public static final int STATE_CONNECTED = 3;
+
+    private final UUID APP_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    private final String APP_NAME = "BluetoothChatApp";
 
     public static final int MESSAGE_STATE_CHANGED = 0;
     public static final int MESSAGE_READ = 1;
@@ -242,6 +242,7 @@ public class ChatUtils {
 
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
+
 
             try {
                 tmpIn = socket.getInputStream();

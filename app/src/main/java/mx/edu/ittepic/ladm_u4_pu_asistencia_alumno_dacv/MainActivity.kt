@@ -15,11 +15,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import mx.edu.ittepic.ladm_u4_pu_asistencia_alumno_dacv.databinding.ActivityMainBinding
+import java.io.IOException
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var m_address: String
     private var connectedDevice: String? = null
-    private val adapterMainChat: ArrayAdapter<String>? = null
+    private var adapterMainChat: ArrayAdapter<String>? = null
+    val arrayMessage = ArrayList<String>()
 
     val MESSAGE_STATE_CHANGED = 0
     val MESSAGE_READ = 1
@@ -62,15 +63,13 @@ class MainActivity : AppCompatActivity() {
     val DEVICE_NAME = "deviceName"
     val TOAST = "toast"
 
-    lateinit var charUtils : ChatUtils
+    lateinit var chatUtils : MessageUtils
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -83,9 +82,26 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        bluetoothAdapter?.getProfileProxy(this, profileListener, BluetoothProfile.HEADSET)
+        binding.tvDevice.setOnClickListener {
+            Log.i("######",arrayMessage.size.toString())
+        }
 
-        charUtils = ChatUtils(this,handler)
+        bluetoothAdapter?.getProfileProxy(this, profileListener, BluetoothProfile.HEADSET)
+        binding.btnPresente.setOnClickListener {
+            val message: String = binding.etNoControl.text.toString()
+            if (!message.isEmpty()) {
+                binding.etNoControl.setText("")
+                chatUtils.write(message.toByteArray())
+            }
+
+        }
+
+
+        adapterMainChat = ArrayAdapter(this, android.R.layout.simple_list_item_1)
+
+        binding.list.adapter = adapterMainChat
+
+        chatUtils = MessageUtils(this,handler)
     }
 
     override fun onStart() {
@@ -101,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 if (mac == m_address) {
                     mySelectedBluetoothDevice = device
                     binding.tvDevice.setText(device.name.toString())
-                    charUtils.connect(device)
+                    chatUtils.connect(device)
                 }
 
             }
@@ -247,6 +263,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val handler = Handler { message ->
+        Log.i("##### 266",message.what.toString())
         when (message.what) {
             MESSAGE_STATE_CHANGED -> when (message.arg1) {
                 STATE_NONE -> setState("Not Connected")
@@ -258,11 +275,14 @@ class MainActivity : AppCompatActivity() {
                 val buffer1 = message.obj as ByteArray
                 val outputBuffer = String(buffer1)
                 adapterMainChat?.add("Me: $outputBuffer")
+                Log.i("####### 278", outputBuffer)
             }
             MESSAGE_READ -> {
                 val buffer = message.obj as ByteArray
                 val inputBuffer = String(buffer, 0, message.arg1)
+                arrayMessage.add(inputBuffer)
                 adapterMainChat?.add(connectedDevice + ": " + inputBuffer)
+                Log.i("####### 85", inputBuffer)
             }
             MESSAGE_DEVICE_NAME -> {
                 connectedDevice = message.data.getString(DEVICE_NAME)
@@ -276,4 +296,6 @@ class MainActivity : AppCompatActivity() {
         }
         false
     }
+
+
 }

@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "mx.edu.ittepic.ladm_u4_pu_asistencia_alumno_dacv"
-        minSdk 26
+        minSdk 24
         targetSdk 32
         versionCode 1
         versionName "1.0"
