@@ -37,11 +37,7 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_ENABLE_BT = 1
     private val MAC_ADDRESS = 301
 
-    private val uuid: UUID =
-        UUID.fromString("06ae0a74-7bd4-43aa-ab5d-2511f3f6bab1") // GENERATE NEW UUID IF IT WONT WORK
     private lateinit var mySelectedBluetoothDevice: BluetoothDevice
-    private lateinit var socket: BluetoothSocket
-    private lateinit var myHandler: Handler
 
     lateinit var m_address: String
     private var connectedDevice: String? = null
@@ -93,14 +89,10 @@ class MainActivity : AppCompatActivity() {
                 binding.etNoControl.setText("")
                 chatUtils.write(message.toByteArray())
             }
-
         }
 
-
         adapterMainChat = ArrayAdapter(this, android.R.layout.simple_list_item_1)
-
         binding.list.adapter = adapterMainChat
-
         chatUtils = MessageUtils(this,handler)
     }
 
@@ -186,7 +178,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "El bluetooth ya está encendido", Toast.LENGTH_LONG).show()
             }
         } else {
-            Toast.makeText(this, "Device doesnt support bluetooth", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "No se puede encender", Toast.LENGTH_LONG).show()
         }
 
     }
@@ -266,10 +258,10 @@ class MainActivity : AppCompatActivity() {
         Log.i("##### 266",message.what.toString())
         when (message.what) {
             MESSAGE_STATE_CHANGED -> when (message.arg1) {
-                STATE_NONE -> setState("Not Connected")
-                STATE_LISTEN -> setState("Not Connected")
-                STATE_CONNECTING -> setState("Connecting...")
-                STATE_CONNECTED -> setState("Connected: $connectedDevice")
+                STATE_NONE -> setState("No Conectado")
+                STATE_LISTEN -> setState("No Conectado")
+                STATE_CONNECTING -> setState("Conectando...")
+                STATE_CONNECTED -> setState("Conectado: $connectedDevice")
             }
             MESSAGE_WRITE -> {
                 val buffer1 = message.obj as ByteArray
@@ -296,6 +288,4 @@ class MainActivity : AppCompatActivity() {
         }
         false
     }
-
-
 }

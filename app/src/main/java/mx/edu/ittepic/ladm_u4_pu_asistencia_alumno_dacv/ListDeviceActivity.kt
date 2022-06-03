@@ -44,8 +44,8 @@ class ListDeviceActivity : AppCompatActivity() {
        // listAvailableDevices = binding.listAvailableDevices
         progressScanDevices = binding.progressScanDevices
 
-        adapterPairedDevices = ArrayAdapter(context!!, R.layout.device_list_item)
-        adapterAvailableDevices = ArrayAdapter(context!!, R.layout.device_list_item)
+        adapterPairedDevices = ArrayAdapter(context!!, R.layout.item_list_device)
+        adapterAvailableDevices = ArrayAdapter(context!!, R.layout.item_list_device)
 
         listPairedDevices.adapter = adapterPairedDevices
         //listAvailableDevices.adapter = adapterAvailableDevices
@@ -102,7 +102,7 @@ class ListDeviceActivity : AppCompatActivity() {
                 //val intent = Intent()
                 intent.putExtra("deviceAddress", address)
                 intent.putExtra("device", mySelectedBluetoothDevice)
-
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 //setResult(RESULT_OK, intent)
                 startActivity(intent)
                 finish()
@@ -123,17 +123,6 @@ class ListDeviceActivity : AppCompatActivity() {
                         ${device.address}
                         """.trimIndent()
                     )
-                }
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-                progressScanDevices.visibility = View.GONE
-                if (adapterAvailableDevices!!.count == 0) {
-                    Toast.makeText(context, "No new devices found", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(
-                        context,
-                        "Click on the device to start the chat",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         }
