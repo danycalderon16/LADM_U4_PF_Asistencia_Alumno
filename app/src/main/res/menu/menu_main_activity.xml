@@ -12,4 +12,9 @@
         android:icon="@drawable/ic_bluetooth"
         android:title="Encender Bluetooh"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_help"
+        android:icon="@drawable/ic_baseline_help_24"
+        android:title="Aviso"
+        app:showAsAction="always" />
 </menu>

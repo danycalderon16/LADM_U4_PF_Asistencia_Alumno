@@ -22,12 +22,6 @@
         android:layout_marginTop="5dp"
         android:layout_below="@id/tv_device"/>
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/tv_state"/>
-
     <EditText
         android:id="@+id/et_no_control"
         android:inputType="number"

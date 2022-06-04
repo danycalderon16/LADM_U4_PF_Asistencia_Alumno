@@ -41,8 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var m_address: String
     private var connectedDevice: String? = null
-    private var adapterMainChat: ArrayAdapter<String>? = null
-    val arrayMessage = ArrayList<String>()
 
     val MESSAGE_STATE_CHANGED = 0
     val MESSAGE_READ = 1
@@ -78,10 +76,6 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        binding.tvDevice.setOnClickListener {
-            Log.i("######",arrayMessage.size.toString())
-        }
-
         bluetoothAdapter?.getProfileProxy(this, profileListener, BluetoothProfile.HEADSET)
         binding.btnPresente.setOnClickListener {
             val message: String = binding.etNoControl.text.toString()
@@ -90,9 +84,6 @@ class MainActivity : AppCompatActivity() {
                 chatUtils.write(message.toByteArray())
             }
         }
-
-        adapterMainChat = ArrayAdapter(this, android.R.layout.simple_list_item_1)
-        binding.list.adapter = adapterMainChat
         chatUtils = MessageUtils(this,handler)
     }
 
@@ -149,6 +140,16 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menu_enable_bluetooth -> {
                 enableBluetooth()
+                true
+            }
+            R.id.menu_help -> {
+                AlertDialog.Builder(this)
+                    .setTitle("¡¡¡IMPORTANTE!!!")
+                    .setMessage("Para poder conectarse con el alumno " +
+                            "los dispositivos previamente YA DEBEN ESTAR VINCULADOS.\n" +
+                            "Se recomienda primero dar conectar en el dispositivo ALUMNO, " +
+                            "y después en el de MAESTRO.")
+                    .show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -266,14 +267,11 @@ class MainActivity : AppCompatActivity() {
             MESSAGE_WRITE -> {
                 val buffer1 = message.obj as ByteArray
                 val outputBuffer = String(buffer1)
-                adapterMainChat?.add("Me: $outputBuffer")
                 Log.i("####### 278", outputBuffer)
             }
             MESSAGE_READ -> {
                 val buffer = message.obj as ByteArray
                 val inputBuffer = String(buffer, 0, message.arg1)
-                arrayMessage.add(inputBuffer)
-                adapterMainChat?.add(connectedDevice + ": " + inputBuffer)
                 Log.i("####### 85", inputBuffer)
             }
             MESSAGE_DEVICE_NAME -> {

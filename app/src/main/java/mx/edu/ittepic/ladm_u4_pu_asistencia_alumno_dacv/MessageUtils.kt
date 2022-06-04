@@ -251,7 +251,7 @@ public class MessageUtils(context: Context?, handler: Handler?) {
     private fun connectionLost() {
         val message: Message? = handler?.obtainMessage(MESSAGE_TOAST)
         val bundle = Bundle()
-        bundle.putString(TOAST, "Connection Lost")
+        bundle.putString(TOAST, "Conexión perdida")
         message!!.data = bundle
         handler?.sendMessage(message)
         this.start()
@@ -261,7 +261,7 @@ public class MessageUtils(context: Context?, handler: Handler?) {
     private fun connectionFailed() {
         val message: Message? = handler?.obtainMessage(MESSAGE_TOAST)
         val bundle = Bundle()
-        bundle.putString(TOAST, "Cant connect to the device")
+        bundle.putString(TOAST, "No se puede conectar con el dispositivo")
         message!!.data = bundle
         handler?.sendMessage(message)
         this@MessageUtils.start()
